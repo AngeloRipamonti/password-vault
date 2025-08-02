@@ -15,7 +15,7 @@ class SiteAuth(object):
         return f"Website: {self.site}\nUsername: {self.username}\nPassword: {self.password}"
 
     def toCSV(self):
-        return f"{self.site},{self.username},{self.password},\n"
+        return f"{self.site},{self.username.decode()},{self.password.decode()},\n"
     
     def decode(self, key):
         try:
@@ -28,16 +28,17 @@ class SiteAuth(object):
     @staticmethod
     def parseSiteAuth(csv):
         site, username, password, eol = csv.split(",")
-        return SiteAuth(site, username, password)
+        return SiteAuth(site, username.encode(), password.encode())
 
 
 # main
 c = ""
 while c != "0":
     c = input('''
-    1. Login
-    2. Register
-    ''')
+1. Login
+2. Register
+any other key to exit
+''')
     match c:
         case "1":
             passkey = input("Insert the password:\n")
@@ -53,11 +54,11 @@ while c != "0":
             choice = ""
             while choice != "0":
                 choice = input('''
-                1. Add a new password
-                2. View a site password
-                3. Remove a password
-                0. Exit
-                ''')
+1. Add a new password
+2. View a site password
+3. Remove a password
+0. Exit
+''')
                 match choice:
                     case "1":
                         site = input("Insert the url:\n")
